@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="fa" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>MAHDI DEV ENVIRONMENT</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#070b10;
+    color:#d7e6ed;
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Courier New",
+        monospace;
+}
+
+body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.bg{
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(50,180,255,.08),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 10% 90%,
+            rgba(50,90,255,.06),
+            transparent 28%
+        ),
+        #070b10;
+}
+
+.grid{
+    position:fixed;
+    inset:0;
+    opacity:.055;
+    background-image:
+        linear-gradient(
+            rgba(150,210,255,.08) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(150,210,255,.08) 1px,
+            transparent 1px
+        );
+    background-size:42px 42px;
+}
+
+/* =========================
+   IDE
+========================= */
+
+.ide{
+    position:relative;
+    z-index:2;
+
+    width:min(1180px,95vw);
+    height:min(760px,94vh);
+
+    display:flex;
+    flex-direction:column;
+
+    overflow:hidden;
+
+    border:
+        1px solid
+        rgba(160,210,230,.13);
+
+    border-radius:14px;
+
+    background:
+        rgba(8,13,19,.96);
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.65),
+        0 0 80px rgba(30,150,220,.035);
+
+    opacity:0;
+
+    transform:
+        translateY(15px)
+        scale(.985);
+
+    transition:
+        opacity .8s ease,
+        transform .8s ease;
+}
+
+.ide.show{
+    opacity:1;
+    transform:none;
+}
+
+/* =========================
+   TITLE BAR
+========================= */
+
+.titlebar{
+    height:43px;
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 14px;
+
+    background:#0b1118;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.055);
+}
+
+.windowButtons{
+    display:flex;
+    gap:7px;
+}
+
+.windowButtons span{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#26343d;
+}
+
+.windowButtons span:first-child{
+    background:#5ed8ff;
+    box-shadow:
+        0 0 9px
+        rgba(94,216,255,.5);
+}
+
+.title{
+    margin-left:15px;
+    color:#8299a5;
+    font-size:10px;
+    letter-spacing:1px;
+}
+
+.title strong{
+    color:#c4dce5;
+    font-weight:400;
+}
+
+/* =========================
+   BODY
+========================= */
+
+.body{
+    flex:1;
+    min-height:0;
+    display:flex;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    width:185px;
+    flex-shrink:0;
+
+    background:#080d13;
+
+    border-right:
+        1px solid
+        rgba(255,255,255,.05);
+
+    padding-top:15px;
+}
+
+.sectionTitle{
+    padding:
+        0 16px
+        10px;
+
+    color:#415660;
+
+    font-size:8px;
+
+    letter-spacing:2px;
+}
+
+.file{
+    height:34px;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 16px;
+
+    gap:8px;
+
+    color:#637983;
+
+    font-size:9px;
+}
+
+.file.active{
+    color:#c5e8f4;
+
+    background:
+        rgba(70,190,240,.065);
+
+    border-left:
+        2px solid
+        #61d7ff;
+}
+
+.fileIcon{
+    color:#61d7ff;
+}
+
+/* =========================
+   MAIN AREA
+========================= */
+
+.main{
+    flex:1;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+}
+
+/* =========================
+   TABS
+========================= */
+
+.tabs{
+    height:37px;
+    flex-shrink:0;
+
+    display:flex;
+
+    background:#090f15;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.05);
+}
+
+.tab{
+    min-width:160px;
+
+    height:100%;
+
+    display:flex;
+    align-items:center;
+
+    gap:8px;
+
+    padding:0 14px;
+
+    border-right:
+        1px solid
+        rgba(255,255,255,.045);
+
+    color:#b8d1db;
+
+    font-size:9px;
+
+    border-top:
+        1px solid
+        transparent;
+}
+
+.tab.active{
+    background:#0c131a;
+    border-top-color:#62d7ff;
+}
+
+.tabDot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#62d7ff;
+}
+
+/* =========================
+   TERMINAL WORKSPACE
+========================= */
+
+.workspace{
+    flex:1;
+    min-height:0;
+
+    display:flex;
+    flex-direction:column;
+
+    position:relative;
+}
+
+/* =========================
+   TERMINAL
+========================= */
+
+.terminal{
+    flex:1;
+    min-height:0;
+
+    overflow:hidden;
+
+    background:#05090e;
+
+    padding:
+        16px 20px;
+
+    font-size:10px;
+
+    line-height:1.75;
+}
+
+.termLine{
+    min-height:18px;
+    white-space:pre-wrap;
+}
+
+.prompt{
+    color:#65d9ff;
+}
+
+.command{
+    color:#dcebf0;
+}
+
+.info{
+    color:#72919d;
+}
+
+.download{
+    color:#82cfe7;
+}
+
+.success{
+    color:#82dfae;
+}
+
+.warning{
+    color:#d9bd78;
+}
+
+.error{
+    color:#e17f8b;
+}
+
+.package{
+    color:#b9e5f2;
+}
+
+.dim{
+    color:#435963;
+}
+
+.white{
+    color:#e2f2f6;
+}
+
+/* progress */
+
+.progressLine{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.progressBar{
+    display:inline-block;
+
+    width:170px;
+    height:7px;
+
+    border-radius:2px;
+
+    background:#14232b;
+
+    overflow:hidden;
+}
+
+.progressFill{
+    width:0;
+    height:100%;
+
+    background:#54c9ee;
+
+    transition:.15s;
+}
+
+/* =========================
+   CODE EDITOR
+========================= */
+
+.codeEditor{
+    display:none;
+
+    flex:1;
+    min-height:0;
+
+    overflow:hidden;
+
+    background:#070c12;
+
+    padding:
+        15px 0;
+
+    font-size:11px;
+
+    line-height:1.9;
+}
+
+.codeEditor.active{
+    display:block;
+}
+
+.codeRow{
+    display:grid;
+    grid-template-columns:48px 1fr;
+
+    min-height:23px;
+
+    padding-right:20px;
+}
+
+.codeRow.current{
+    background:
+        linear-gradient(
+            90deg,
+            rgba(70,190,240,.08),
+            rgba(70,190,240,.025),
+            transparent
+        );
+}
+
+.lineNumber{
+    text-align:right;
+
+    padding-right:14px;
+
+    color:#293b44;
+
+    user-select:none;
+}
+
+.codeText{
+    white-space:pre;
+
+    color:#a9c1cb;
+
+    overflow:hidden;
+}
+
+.kw{
+    color:#69d8ff;
+}
+
+.type{
+    color:#c6eaff;
+}
+
+.str{
+    color:#9de4b8;
+}
+
+.func{
+    color:#dfc4ff;
+}
+
+.var{
+    color:#d0e7ee;
+}
+
+.num{
+    color:#ffc477;
+}
+
+.comment{
+    color:#45616c;
+}
+
+.cursor{
+    display:inline-block;
+
+    width:6px;
+    height:14px;
+
+    vertical-align:-2px;
+
+    margin-left:2px;
+
+    background:#73ddff;
+
+    box-shadow:
+        0 0 8px
+        rgba(90,210,255,.9);
+
+    animation:blink .7s infinite;
+}
+
+/* =========================
+   STATUS BAR
+========================= */
+
+.status{
+    height:23px;
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 12px;
+
+    background:#07131a;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.05);
+
+    color:#486572;
+
+    font-size:7px;
+
+    letter-spacing:.5px;
+}
+
+.statusLeft{
+    color:#64d7ff;
+}
+
+/* =========================
+   FINAL
+========================= */
+
+#final{
+    position:fixed;
+    inset:0;
+
+    z-index:100;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex-direction:column;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(55,190,255,.13),
+            #02060a 48%
+        );
+
+    opacity:0;
+    visibility:hidden;
+
+    transform:scale(1.04);
+
+    transition:
+        opacity 1.2s,
+        transform 1.2s,
+        visibility 1.2s;
+}
+
+#final.show{
+    opacity:1;
+    visibility:visible;
+    transform:none;
+}
+
+.finalHeart{
+    font-size:96px;
+
+    filter:
+        drop-shadow(
+            0 0 18px
+            rgba(100,220,255,.95)
+        )
+        drop-shadow(
+            0 0 65px
+            rgba(50,170,255,.45)
+        );
+
+    animation:pulse 1.8s infinite;
+}
+
+.finalText{
+    margin-top:25px;
+
+    direction:ltr;
+
+    font-family:Georgia,serif;
+
+    font-size:
+        clamp(
+            30px,
+            6vw,
+            68px
+        );
+
+    letter-spacing:4px;
+
+    color:#f4fbff;
+
+    text-shadow:
+        0 0 30px
+        rgba(100,210,255,.45);
+}
+
+.finalSub{
+    margin-top:14px;
+
+    color:#587883;
+
+    font-size:8px;
+
+    letter-spacing:4px;
+}
+
+/* =========================
+   PARTICLES
+========================= */
+
+.particle{
+    position:fixed;
+
+    width:3px;
+    height:3px;
+
+    border-radius:50%;
+
+    background:#8ce6ff;
+
+    box-shadow:
+        0 0 10px
+        #62d8ff;
+
+    pointer-events:none;
+
+    z-index:300;
+
+    animation:
+        particleOut
+        1.5s
+        ease-out
+        forwards;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes blink{
+    50%{
+        opacity:0;
+    }
+}
+
+@keyframes pulse{
+    50%{
+        transform:scale(1.1);
+    }
+}
+
+@keyframes particleOut{
+    from{
+        transform:
+            translate(0,0)
+            scale(1);
+
+        opacity:1;
+    }
+
+    to{
+        transform:
+            translate(var(--x),var(--y))
+            scale(0);
+
+        opacity:0;
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px){
+
+    .ide{
+        width:96vw;
+        height:95vh;
+        border-radius:12px;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .title{
+        font-size:8px;
+    }
+
+    .terminal{
+        padding:
+            13px 12px;
+
+        font-size:9px;
+    }
+
+    .codeEditor{
+        font-size:9px;
+    }
+
+    .codeRow{
+        grid-template-columns:38px 1fr;
+        padding-right:8px;
+    }
+
+    .lineNumber{
+        padding-right:10px;
+    }
+
+    .finalText{
+        font-size:30px;
+    }
+
+    .finalHeart{
+        font-size:78px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="grid"></div>
+
+
+<div class="ide" id="ide">
+
+    <!-- TITLE BAR -->
+
+    <div class="titlebar">
+
+        <div class="windowButtons">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="title">
+            <strong>MAHDI DEV</strong>
+            &nbsp;—&nbsp;
+            Python Environment
+        </div>
+
+    </div>
+
+
+    <!-- BODY -->
+
+    <div class="body">
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="sectionTitle">
+                EXPLORER
+            </div>
+
+            <div
+                class="file active"
+                id="filePython"
+            >
+                <span class="fileIcon">◆</span>
+                main.py
+            </div>
+
+            <div
+                class="file"
+                id="fileJava"
+            >
+                <span class="fileIcon">◆</span>
+                MahdiCore.java
+            </div>
+
+            <div class="file">
+                <span class="fileIcon">◇</span>
+                requirements.txt
+            </div>
+
+            <div class="file">
+                <span class="fileIcon">◇</span>
+                config.json
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN -->
+
+        <section class="main">
+
+            <div class="tabs">
+
+                <div
+                    class="tab active"
+                    id="tabTerminal"
+                >
+                    <span class="tabDot"></span>
+                    Terminal
+                </div>
+
+                <div
+                    class="tab"
+                    id="tabPython"
+                >
+                    <span class="tabDot"></span>
+                    main.py
+                </div>
+
+                <div
+                    class="tab"
+                    id="tabJava"
+                >
+                    <span class="tabDot"></span>
+                    MahdiCore.java
+                </div>
+
+            </div>
+
+
+            <div class="workspace">
+
+                <!-- TERMINAL -->
+
+                <div
+                    class="terminal"
+                    id="terminal"
+                ></div>
+
+
+                <!-- PYTHON -->
+
+                <div
+                    class="codeEditor"
+                    id="pythonEditor"
+                ></div>
+
+
+                <!-- JAVA -->
+
+                <div
+                    class="codeEditor"
+                    id="javaEditor"
+                ></div>
+
+            </div>
+
+
+            <div class="status">
+
+                <span
+                    class="statusLeft"
+                    id="statusLeft"
+                >
+                    Python
+                </span>
+
+                <span id="statusCenter">
+                    Ready
+                </span>
+
+                <span>
+                    UTF-8
+                    &nbsp;|&nbsp;
+                    LF
+                </span>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+<!-- FINAL -->
+
+<div id="final">
+
+    <div class="finalHeart">
+        🩵
+    </div>
+
+    <div class="finalText">
+        I LOVE ÂMIN 🩵
+    </div>
+
+    <div class="finalSub">
+        PROCESS COMPLETED SUCCESSFULLY
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const ide =
+    document.getElementById("ide");
+
+const terminal =
+    document.getElementById("terminal");
+
+const pythonEditor =
+    document.getElementById("pythonEditor");
+
+const javaEditor =
+    document.getElementById("javaEditor");
+
+const statusLeft =
+    document.getElementById("statusLeft");
+
+const statusCenter =
+    document.getElementById("statusCenter");
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function sleep(ms){
+    return new Promise(
+        resolve => setTimeout(resolve,ms)
+    );
+}
+
+function escapeHTML(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;");
+}
+
+
+/* =========================================================
+   TERMINAL OUTPUT
+========================================================= */
+
+function terminalLine(
+    text,
+    className=""
+){
+
+    const line =
+        document.createElement("div");
+
+    line.className =
+        "termLine " + className;
+
+    line.textContent =
+        text;
+
+    terminal.appendChild(line);
+
+    terminal.scrollTop =
+        terminal.scrollHeight;
+
+    return line;
+}
+
+
+/* =========================================================
+   COMMAND TYPING
+========================================================= */
+
+async function command(
+    text
+){
+
+    const line =
+        document.createElement("div");
+
+    line.className =
+        "termLine";
+
+    const prompt =
+        document.createElement("span");
+
+    prompt.className =
+        "prompt";
+
+    prompt.textContent =
+        "mahdi@dev:~/project$ ";
+
+    const commandText =
+        document.createElement("span");
+
+    commandText.className =
+        "command";
+
+    line.appendChild(prompt);
+    line.appendChild(commandText);
+
+    terminal.appendChild(line);
+
+    for(
+        let i=0;
+        i<text.length;
+        i++
+    ){
+
+        commandText.textContent =
+            text.slice(0,i+1);
+
+        await sleep(
+            text[i] === " "
+            ? 18
+            : 28
+        );
+    }
+
+    await sleep(300);
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+async function progress(
+    label,
+    start,
+    end
+){
+
+    const line =
+        document.createElement("div");
+
+    line.className =
+        "termLine progressLine";
+
+    const text =
+        document.createElement("span");
+
+    text.className =
+        "download";
+
+    const bar =
+        document.createElement("span");
+
+    bar.className =
+        "progressBar";
+
+    const fill =
+        document.createElement("span");
+
+    fill.className =
+        "progressFill";
+
+    bar.appendChild(fill);
+
+    const percent =
+        document.createElement("span");
+
+    percent.className =
+        "download";
+
+    line.appendChild(text);
+    line.appendChild(bar);
+    line.appendChild(percent);
+
+    terminal.appendChild(line);
+
+    for(
+        let i=start;
+        i<=end;
+        i+=4
+    ){
+
+        text.textContent =
+            label;
+
+        fill.style.width =
+            i + "%";
+
+        percent.textContent =
+            i + "%";
+
+        await sleep(45);
+    }
+
+    fill.style.width =
+        "100%";
+
+    percent.textContent =
+        "100%";
+
+    await sleep(250);
+}
+
+
+/* =========================================================
+   PYTHON SYNTAX
+========================================================= */
+
+function pythonHighlight(text){
+
+    let s =
+        escapeHTML(text);
+
+    s =
+        s.replace(
+            /(".*?")/g,
+            '<span class="str">$1</span>'
+        );
+
+    s =
+        s.replace(
+            /\b(class|def|return|import|from|as|print|if|True|False)\b/g,
+            '<span class="kw">$1</span>'
+        );
+
+    s =
+        s.replace(
+            /\b(Heart|requests|rich)\b/g,
+            '<span class="type">$1</span>'
+        );
+
+    s =
+        s.replace(
+            /\b(__init__|love|main|print)\b/g,
+            '<span class="func">$1</span>'
+        );
+
+    return s;
+}
+
+
+/* =========================================================
+   JAVA SYNTAX
+========================================================= */
+
+function javaHighlight(text){
+
+    let s =
+        escapeHTML(text);
+
+    s =
+        s.replace(
+            /(".*?")/g,
+            '<span class="str">$1</span>'
+        );
+
+    s =
+        s.replace(
+            /\b(public|private|static|final|class|return|void|new)\b/g,
+            '<span class="kw">$1</span>'
+        );
+
+    s =
+        s.replace(
+            /\b(String|System|MahdiCore)\b/g,
+            '<span class="type">$1</span>'
+        );
+
+    s =
+        s.replace(
+            /\b(message|main|println)\b/g,
+            '<span class="func">$1</span>'
+        );
+
+    return s;
+}
+
+
+/* =========================================================
+   TYPE CODE LINE
+========================================================= */
+
+async function typeCodeLine(
+    editor,
+    text,
+    language,
+    number
+){
+
+    const row =
+        document.createElement("div");
+
+    row.className =
+        "codeRow current";
+
+    const num =
+        document.createElement("div");
+
+    num.className =
+        "lineNumber";
+
+    num.textContent =
+        String(number).padStart(2,"0");
+
+    const code =
+        document.createElement("div");
+
+    code.className =
+        "codeText";
+
+    row.appendChild(num);
+    row.appendChild(code);
+
+    editor.appendChild(row);
+
+    for(
+        let i=0;
+        i<text.length;
+        i++
+    ){
+
+        const current =
+            text.slice(0,i+1);
+
+        code.innerHTML =
+            language === "python"
+            ? pythonHighlight(current)
+            : javaHighlight(current);
+
+        const cursor =
+            document.createElement("span");
+
+        cursor.className =
+            "cursor";
+
+        code.appendChild(cursor);
+
+        statusCenter.textContent =
+            `Ln ${number}, Col ${i+1}`;
+
+        await sleep(
+            text[i] === " "
+            ? 10
+            : 25
+        );
+    }
+
+    row.classList.remove("current");
+
+    await sleep(90);
+}
+
+
+/* =========================================================
+   WRITE CODE
+========================================================= */
+
+async function writeCode(
+    editor,
+    lines,
+    language
+){
+
+    for(
+        let i=0;
+        i<lines.length;
+        i++
+    ){
+
+        await typeCodeLine(
+            editor,
+            lines[i],
+            language,
+            i+1
+        );
+    }
+}
+
+
+/* =========================================================
+   PARTICLES
+========================================================= */
+
+function createParticles(){
+
+    const cx =
+        innerWidth / 2;
+
+    const cy =
+        innerHeight / 2;
+
+    for(
+        let i=0;
+        i<90;
+        i++
+    ){
+
+        const p =
+            document.createElement("div");
+
+        p.className =
+            "particle";
+
+        p.style.left =
+            cx + "px";
+
+        p.style.top =
+            cy + "px";
+
+        const angle =
+            Math.random() *
+            Math.PI * 2;
+
+        const distance =
+            100 +
+            Math.random() * 400;
+
+        p.style.setProperty(
+            "--x",
+            Math.cos(angle) *
+            distance +
+            "px"
+        );
+
+        p.style.setProperty(
+            "--y",
+            Math.sin(angle) *
+            distance +
+            "px"
+        );
+
+        document.body.appendChild(p);
+
+        setTimeout(
+            () => p.remove(),
+            1600
+        );
+    }
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+const pythonCode = [
+
+'import os',
+'import requests',
+'from rich.console import Console',
+'',
+'console = Console()',
+'',
+'class Heart:',
+'',
+'    def __init__(self):',
+'        self.owner = "MAHDI"',
+'        self.color = "🩵"',
+'',
+'    def love(self):',
+'        return "I LOVE ÂMIN 🩵"',
+'',
+'',
+'def main():',
+'    heart = Heart()',
+'    console.print(heart.love())',
+'',
+'',
+'if __name__ == "__main__":',
+'    main()'
+
+];
+
+
+const javaCode = [
+
+'public final class MahdiCore {',
+'',
+'    private static final String NAME = "MAHDI";',
+'    private static final String HEART = "🩵";',
+'',
+'    public static String message() {',
+'        return "I LOVE ÂMIN 🩵";',
+'    }',
+'',
+'    public static void main(String[] args) {',
+'        System.out.println(message());',
+'    }',
+'}'
+
+];
+
+
+/* =========================================================
+   PYTHON INSTALLATION
+========================================================= */
+
+async function installPython(){
+
+    terminalLine(
+        "Python 3.13.13 environment detected.",
+        "info"
+    );
+
+    await sleep(450);
+
+    await command(
+        "python -m pip install requests rich"
+    );
+
+    terminalLine(
+        "Looking in indexes: https://pypi.org/simple",
+        "info"
+    );
+
+    await sleep(500);
+
+    terminalLine(
+        "Collecting requests",
+        "package"
+    );
+
+    await sleep(350);
+
+    await progress(
+        "Downloading requests-2.32.5...",
+        0,
+        100
+    );
+
+    terminalLine(
+        "Collecting rich",
+        "package"
+    );
+
+    await sleep(350);
+
+    await progress(
+        "Downloading rich-14.1.0...",
+        0,
+        100
+    );
+
+    terminalLine(
+        "Collecting charset-normalizer",
+        "package"
+    );
+
+    await sleep(250);
+
+    await progress(
+        "Downloading charset_normalizer...",
+        0,
+        100
+    );
+
+    terminalLine(
+        "Collecting idna",
+        "package"
+    );
+
+    await sleep(220);
+
+    await progress(
+        "Downloading idna...",
+        0,
+        100
+    );
+
+    terminalLine(
+        "Collecting urllib3",
+        "package"
+    );
+
+    await sleep(220);
+
+    await progress(
+        "Downloading urllib3...",
+        0,
+        100
+    );
+
+    terminalLine(
+        "Installing collected packages...",
+        "info"
+    );
+
+    await sleep(450);
+
+    await progress(
+        "Installing requests...",
+        0,
+        100
+    );
+
+    await progress(
+        "Installing rich...",
+        0,
+        100
+    );
+
+    terminalLine(
+        "Successfully installed requests rich",
+        "success"
+    );
+
+    await sleep(700);
+}
+
+
+/* =========================================================
+   PYTHON BUILD
+========================================================= */
+
+async function buildPython(){
+
+    document
+        .getElementById("tabTerminal")
+        .classList.remove("active");
+
+    document
+        .getElementById("tabPython")
+        .classList.add("active");
+
+    pythonEditor.classList.add("active");
+
+    statusLeft.textContent =
+        "Python";
+
+    terminalLine(
+        "Creating main.py...",
+        "info"
+    );
+
+    await sleep(500);
+
+    terminalLine(
+        "Writing source code...",
+        "info"
+    );
+
+    await sleep(300);
+
+    await writeCode(
+        pythonEditor,
+        pythonCode,
+        "python"
+    );
+
+    await sleep(500);
+
+    terminalLine(
+        "Checking Python syntax...",
+        "info"
+    );
+
+    await sleep(650);
+
+    terminalLine(
+        "Syntax OK ✓",
+        "success"
+    );
+
+    await sleep(450);
+
+    await command(
+        "python main.py"
+    );
+
+    await sleep(650);
+
+    terminalLine(
+        "Heart initialized for MAHDI 🩵",
+        "white"
+    );
+
+    await sleep(450);
+
+    terminalLine(
+        "I LOVE ÂMIN 🩵",
+        "white"
+    );
+
+    await sleep(700);
+}
+
+
+/* =========================================================
+   JAVA BUILD
+========================================================= */
+
+async function buildJava(){
+
+    pythonEditor.classList.remove("active");
+
+    javaEditor.classList.add("active");
+
+    document
+        .getElementById("tabPython")
+        .classList.remove("active");
+
+    document
+        .getElementById("tabJava")
+        .classList.add("active");
+
+    document
+        .getElementById("filePython")
+        .classList.remove("active");
+
+    document
+        .getElementById("fileJava")
+        .classList.add("active");
+
+    statusLeft.textContent =
+        "Java";
+
+    await sleep(500);
+
+    terminalLine(
+        "Creating MahdiCore.java...",
+        "info"
+    );
+
+    await sleep(500);
+
+    terminalLine(
+        "Writing Java source...",
+        "info"
+    );
+
+    await sleep(300);
+
+    await writeCode(
+        javaEditor,
+        javaCode,
+        "java"
+    );
+
+    await sleep(450);
+
+    await command(
+        "javac MahdiCore.java"
+    );
+
+    await sleep(650);
+
+    terminalLine(
+        "Compiling 1 source file...",
+        "info"
+    );
+
+    await sleep(650);
+
+    terminalLine(
+        "BUILD SUCCESSFUL ✓",
+        "success"
+    );
+
+    await sleep(500);
+
+    await command(
+        "java MahdiCore"
+    );
+
+    await sleep(700);
+
+    terminalLine(
+        "I LOVE ÂMIN 🩵",
+        "white"
+    );
+
+    await sleep(900);
+}
+
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+function finalReveal(){
+
+    createParticles();
+
+    setTimeout(
+        () => {
+
+            document
+                .getElementById("final")
+                .classList.add("show");
+
+        },
+        500
+    );
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+async function start(){
+
+    ide.classList.add("show");
+
+    await sleep(650);
+
+    await command(
+        "python --version"
+    );
+
+    await sleep(400);
+
+    terminalLine(
+        "Python 3.13.13",
+        "white"
+    );
+
+    await sleep(500);
+
+    await installPython();
+
+    await sleep(600);
+
+    await buildPython();
+
+    await sleep(800);
+
+    await buildJava();
+
+    await sleep(800);
+
+    terminalLine(
+        "Process finished with exit code 0",
+        "success"
+    );
+
+    await sleep(1100);
+
+    finalReveal();
+}
+
+
+/* =========================================================
+   INITIAL
+========================================================= */
+
+setTimeout(
+    start,
+    500
+);
+
+</script>
+
+</body>
+</html>
